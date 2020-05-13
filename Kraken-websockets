@@ -1,0 +1,21 @@
+import asyncio
+import websockets
+import json
+import pprint
+import time
+
+async def test():
+	async with websockets.connect("wss://ws.kraken.com/") as websocket:
+		await websocket.send('{ "event": "subscribe", "pair": ["ADA/ETH", "ADA/EUR", "ADA/USD", "ADA/XBT", "ALGO/ETH", "ALGO/EUR", "ALGO/USD", "ALGO/XBT", "ATOM/ETH", "ATOM/EUR", "ATOM/USD", "ATOM/XBT", "BAT/ETH", "BAT/EUR", "BAT/USD", "BAT/XBT", "BCH/EUR", "BCH/USD", "BCH/XBT", "DAI/EUR"], "subscription": { "name": "book", "depth": 10 }}')
+		while True:
+			response = await websocket.recv()
+#			pprint.pprint(json.loads(response))
+			with open('kraken_websockets.json', "a") as f:
+				json.dump(response, f)
+
+
+
+
+
+
+asyncio.run(test())
